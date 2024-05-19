@@ -1,98 +1,80 @@
-# cygunet
 
-## Overview
+# CygnoUNet Project
 
-This is your new Kedro project with Kedro-Viz and PySpark setup, which was generated using `kedro 0.19.4`.
+## Setup Environment on Google Colab
 
-Take a look at the [Kedro documentation](https://docs.kedro.org) to get started.
+To set up the CygnoNet project on Google Colab, follow these steps:
 
-## Rules and guidelines
+1. **Install Poetry and Clone the Repository:**
 
-In order to get the best out of the template:
+   ```python
+   !pip install -q poetry
+   !git clone https://github.com/Gui1402/cygunet.git
+   %cd cygunet
+   !git checkout feature/insert-properties
+   ```
 
-* Don't remove any lines from the `.gitignore` file we provide
-* Make sure your results can be reproduced by following a [data engineering convention](https://docs.kedro.org/en/stable/faq/faq.html#what-is-data-engineering-convention)
-* Don't commit data to your repository
-* Don't commit any credentials or your local configuration to your repository. Keep all your credentials and local configuration in `conf/local/`
+2. **Mount Google Drive (if needed):**
 
-## How to install dependencies
+   ```python
+   from google.colab import drive
+   drive.mount('/content/drive')
+   ```
 
-Declare any dependencies in `requirements.txt` for `pip` installation.
+3. **Unzip Data into the Project Directory:**
 
-To install them, run:
+   Replace `<PATH_ER_NR.ZIP>` with the actual path to your ZIP file in Google Drive.
 
-```
-pip install -r requirements.txt
-```
+   ```python
+   !unzip /content/drive/MyDrive/<PATH_ER_NR.ZIP> -d /content/cygunet/data/01_raw
+   !mv /content/cygunet/data/01_raw/ER-NR/* /content/cygunet/data/01_raw/
+   !rmdir /content/cygunet/data/01_raw/ER-NR
+   ```
 
-## How to run your Kedro pipeline
+4. **Configure Poetry to Use the System Environment and Install Dependencies:**
 
-You can run your Kedro project with:
+   ```python
+   !poetry config virtualenvs.create false
+   !poetry install
+   ```
 
-```
-kedro run
-```
+## Setup Environment on CYGNO Cloud
 
-## How to test your Kedro project
+*To be filled in with specific instructions for setting up the environment on CYGNO Cloud.*
 
-Have a look at the files `src/tests/test_run.py` and `src/tests/pipelines/data_science/test_pipeline.py` for instructions on how to write your tests. Run the tests as follows:
+## Accessing Catalogs to Use Events
 
-```
-pytest
-```
+After setting up the environment, you can access catalogs to use events as follows:
 
-To configure the coverage threshold, look at the `.coveragerc` file.
+1. **Bootstrap the Kedro Project:**
 
-## Project dependencies
+   ```python
+   from kedro.framework.startup import bootstrap_project
+   from kedro.framework.project import pipelines, settings
 
-To see and update the dependency requirements for your project use `requirements.txt`. Install the project requirements with `pip install -r requirements.txt`.
+   # Bootstrap the project to set up logging and configuration
+   project_path = '/content/cygunet'
+   bootstrap_project(project_path)
+   ```
 
-[Further information about project dependencies](https://docs.kedro.org/en/stable/kedro_project_setup/dependencies.html#project-specific-dependencies)
+2. **Create a Kedro Session and Load the Catalog:**
 
-## How to work with Kedro and notebooks
+   ```python
+   from kedro.framework.session import KedroSession
 
-> Note: Using `kedro jupyter` or `kedro ipython` to run your notebook provides these variables in scope: `catalog`, `context`, `pipelines` and `session`.
->
-> Jupyter, JupyterLab, and IPython are already included in the project requirements by default, so once you have run `pip install -r requirements.txt` you will not need to take any extra steps before you use them.
+   # Create and manage the session yourself
+   with KedroSession.create(project_path) as session:
+       context = session.load_context()
 
-### Jupyter
-To use Jupyter notebooks in your Kedro project, you need to install Jupyter:
+   catalog = context.catalog
+   ```
 
-```
-pip install jupyter
-```
+3. **Load and Access Data from the Catalog:**
 
-After installing Jupyter, you can start a local notebook server:
+   For example, to access the `simulation.NR_30` catalog:
 
-```
-kedro jupyter notebook
-```
+   ```python
+   nr_30 = catalog.load("simulation.NR_30")
+   ```
 
-### JupyterLab
-To use JupyterLab, you need to install it:
-
-```
-pip install jupyterlab
-```
-
-You can also start JupyterLab:
-
-```
-kedro jupyter lab
-```
-
-### IPython
-And if you want to run an IPython session:
-
-```
-kedro ipython
-```
-
-### How to ignore notebook output cells in `git`
-To automatically strip out all output cell contents before committing to `git`, you can use tools like [`nbstripout`](https://github.com/kynan/nbstripout). For example, you can add a hook in `.git/config` with `nbstripout --install`. This will run `nbstripout` before anything is committed to `git`.
-
-> *Note:* Your output cells will be retained locally.
-
-## Package your Kedro project
-
-[Further information about building project documentation and packaging your project](https://docs.kedro.org/en/stable/tutorial/package_a_project.html)
+By following these steps, you will be able to set up your environment in Google Colab, configure Poetry, and use Kedro to access your data catalogs.
