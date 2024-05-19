@@ -208,4 +208,5 @@ split-summary-body = false
 numpydoc-section-hyphen-length = false
 
 [tool.poetry.scripts]
+#run it usin poetry run synchronize --dev (use it or no depend of case)
 synchronize = "add_dependencies:add_dependencies"

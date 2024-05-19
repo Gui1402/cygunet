@@ -2,8 +2,7 @@ import numpy as np
 
 
 class CygImage(np.ndarray):
-    """
-    A subclass of numpy.ndarray with additional image processing methods.
+    """A subclass of numpy.ndarray with additional image processing methods.
 
     Parameters
     ----------
@@ -26,8 +25,7 @@ class CygImage(np.ndarray):
         self.info = getattr(obj, "info", None)
 
     def random_translate(self, max_translation: int):
-        """
-        Randomly translates the image within the specified range.
+        """Randomly translates the image within the specified range.
 
         Parameters
         ----------
@@ -61,8 +59,7 @@ class CygImage(np.ndarray):
         return new_image
 
     def cut_edges(self, xmin: int, xmax: int, ymin: int, ymax: int):
-        """
-        Cuts the image to the specified bounding box.
+        """Cuts the image to the specified bounding box.
 
         Parameters
         ----------
@@ -92,8 +89,8 @@ class CygImage(np.ndarray):
         return self[xmin:xmax, ymin:ymax]
 
     def scale(self, imin: float, imax: float, dtype: np.dtype = np.float16):
-        """
-        Scales the image pixel values to the range [0, 1] and converts to the specified dtype.
+        """Scales the image pixel values to the range [0, 1] and converts to
+        the specified dtype.
 
         Parameters
         ----------

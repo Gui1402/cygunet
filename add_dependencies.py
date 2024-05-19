@@ -1,21 +1,35 @@
+import argparse
+import shutil
 import subprocess
 
 
+def add_dependencies(dev: bool):
+    requirements_file = "requirements-dev.txt" if dev else "requirements.txt"
 
+    poetry_path = shutil.which("poetry")
+    if poetry_path is None:
+        raise RuntimeError("Poetry executable not found")
 
-def add_dependencies():
-    with open("requirements.txt") as f:
+    with open(requirements_file) as f:
         for line in f:
             package = line.strip()
             if package and not package.startswith("#"):
-                subprocess.run(["poetry", "add", package])
+                command = [poetry_path, "add"]
+                if dev:
+                    command.append("--dev")
+                command.append(package)
+                subprocess.run(command, check=True)
 
-def add_dependencies_dev():
-    with open("requirements-dev.txt") as f:
-        for line in f:
-            package = line.strip()
-            if package and not package.startswith("#"):
-                subprocess.run(["poetry", "add", "--dev", package])
 
 if __name__ == "__main__":
-    add_dependencies()
+    parser = argparse.ArgumentParser(
+        description="Add dependencies using Poetry."
+    )
+    parser.add_argument(
+        "--dev",
+        action="store_true",
+        help="Use requirements-dev.txt and add dependencies as dev dependencies.",
+    )
+    args = parser.parse_args()
+
+    add_dependencies(dev=args.dev)

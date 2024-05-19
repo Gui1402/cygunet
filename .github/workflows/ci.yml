@@ -25,6 +25,10 @@ jobs:
           poetry install --with dev
           poetry run pre-commit install
 
+      - name: Set MYPYPATH
+        run: |
+          echo "MYPYPATH=src" >> $GITHUB_ENV
+
       - name: Run pre-commit hooks
         run: |
           poetry run pre-commit run --all-files
