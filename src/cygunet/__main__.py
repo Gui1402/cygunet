@@ -1,6 +1,6 @@
-"""cygunet file for ensuring the package is executable
-as `cygunet` and `python -m cygunet`
-"""
+"""Cygunet file for ensuring the package is executable as `cygunet` and `python
+-m cygunet`."""
+
 import importlib
 from pathlib import Path
 

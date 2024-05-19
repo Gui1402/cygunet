@@ -147,5 +147,8 @@ venv.bak/
 # mkdocs documentation
 /site
 
-# mypy
-.mypy_cache/
+# Report files
+flake8-report.txt
+pylint-report.txt
+bandit-report.txt
+mypy-report/
