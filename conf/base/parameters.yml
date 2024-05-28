@@ -1,0 +1,11 @@
+generate_image:
+  sim_dataset: simulation.NR_30
+  noise_dataset: noise.fusion_13545
+  random_shift_max: 400
+  cut_edges: [300, 1500, 300, 1500]
+  number_of_events: 20
+  output_location_path: data/02_intermediate/
+  start_index_sim: 0
+  end_index_sim:  300
+  start_index_noise: 0
+  end_index_noise:  20
