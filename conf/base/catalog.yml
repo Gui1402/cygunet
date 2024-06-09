@@ -39,14 +39,24 @@
 # (transcoding), templating and a way to reuse arguments that are frequently repeated. See more here:
 # https://docs.kedro.org/en/stable/data/data_catalog.html
 
-"simulation.{particle}_{energy}":
-  type: cygunet.datasets.cygno_data.CygnoSimulationImage
-  filepath: data/01_raw/LIME_no_noise_{particle}_{energy}_keV/histograms_Run00001.h5
 
-"noise.{camera}_{runid}":
-  type: cygunet.datasets.cygno_data.CygnoNoiseImage
-  filepath: data/01_raw/{camera}/histograms_Run{runid}.root
+simulation:
+  type: cygunet.datasets.cygno_data.CygnoDataset
+  filepath: data/01_raw/
+  pattern: "(ER|NR)_(.*?)_keV"
+  format_file: h5
 
+noise:
+  type: cygunet.datasets.cygno_data.CygnoDataset
+  filepath: data/01_raw/
+  pattern: '.*/01_raw/fusion/.*\.root$'
+  format_file: root
+
+array_dataset:
+  type: partitions.PartitionedDataset
+  path: data/02_intermediate/experiment
+  dataset: cygunet.datasets.numpy_array_data.NumpyArrayDataset
+  filename_suffix: ".npy"
 
 # companies:
 #   filepath: data/01_raw/companies.csv
